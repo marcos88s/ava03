@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, ActivityIndicator, Alert, TouchableOpacity } from 'react-native';
-import axios from 'axios';
+import api from '../services/api';
 
-// ATENÇÃO: Substitua pelo IP da sua máquina ou URL da sua API
-const API_URL = 'http://192.168.0.107:3000/estoque';
 
 export default function ListaProdutoScreen({ navigation }) {
     const [produtos, setProdutos] = useState([]);
@@ -14,7 +12,8 @@ export default function ListaProdutoScreen({ navigation }) {
         try {
             setLoading(true);
             setError(null);
-            const response = await axios.get(API_URL);
+            // ALTERADO: Usa a instância 'api' com a rota relativa '/estoque'
+            const response = await api.get('/estoque');
             setProdutos(response.data);
         } catch (err) {
             setError('Não foi possível carregar os produtos.');
@@ -41,7 +40,8 @@ export default function ListaProdutoScreen({ navigation }) {
                     text: "Excluir",
                     onPress: async () => {
                         try {
-                            await axios.delete(`${API_URL}/${id}`);
+                            // ALTERADO: Usa a instância 'api' para o delete
+                            await api.delete(`/estoque/${id}`);
                             fetchProdutos();
                         } catch (error) {
                             Alert.alert('Erro', 'Não foi possível excluir o produto.');

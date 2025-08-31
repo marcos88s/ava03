@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, StyleSheet, Alert, Text, ActivityIndicator, TouchableOpacity } from 'react-native';
-import axios from 'axios';
+import api from '../services/api';
 
-// ATENÇÃO: Substitua pelo IP da sua máquina ou URL da sua API
-const API_URL = 'http://192.168.0.107:3000/estoque';
 
 export default function EditProdutoScreen({ route, navigation }) {
     const { estoqueId } = route.params;
@@ -16,7 +14,8 @@ export default function EditProdutoScreen({ route, navigation }) {
     useEffect(() => {
         const fetchProduto = async () => {
             try {
-                const response = await axios.get(`${API_URL}/${estoqueId}`);
+                // ALTERADO: Usa a instância 'api' para buscar o produto específico
+                const response = await api.get(`/estoque/${estoqueId}`);
                 const { nome, quantidade, preco } = response.data;
                 setNome(nome);
                 setQuantidade(String(quantidade));
@@ -37,7 +36,8 @@ export default function EditProdutoScreen({ route, navigation }) {
             return;
         }
         try {
-            await axios.put(`${API_URL}/${estoqueId}`, {
+            // ALTERADO: Usa a instância 'api' para atualizar o produto
+            await api.put(`/estoque/${estoqueId}`, {
                 nome,
                 quantidade: parseInt(quantidade),
                 preco: parseFloat(preco)

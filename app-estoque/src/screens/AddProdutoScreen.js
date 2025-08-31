@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import axios from 'axios';
-
-// ATENÇÃO: Substitua pelo IP da sua máquina ou URL da sua API
-const API_URL = 'http://192.168.0.107:3000/estoque';
+// ADICIONADO: Importa a instância centralizada do Axios
+import api from '../services/api';
 
 export default function AddProdutoScreen({ navigation }) {
     const [nome, setNome] = useState('');
@@ -16,7 +14,8 @@ export default function AddProdutoScreen({ navigation }) {
             return;
         }
         try {
-            await axios.post(API_URL, {
+            // ALTERADO: Usa a instância 'api' para fazer o POST na rota relativa '/estoque'
+            await api.post('/estoque', {
                 nome,
                 quantidade: parseInt(quantidade),
                 preco: parseFloat(preco)
@@ -36,6 +35,8 @@ export default function AddProdutoScreen({ navigation }) {
                     value={nome}
                     onChangeText={setNome}
                     style={styles.input}
+                    placeholder="Digite o nome do produto"
+                    placeholderTextColor="#aaa"
                 />
             </View>
 
@@ -45,6 +46,8 @@ export default function AddProdutoScreen({ navigation }) {
                     value={quantidade}
                     onChangeText={setQuantidade}
                     style={styles.input}
+                    placeholder="Digite a quantidade"
+                    placeholderTextColor="#aaa"
                     keyboardType="numeric"
                 />
             </View>
@@ -55,6 +58,8 @@ export default function AddProdutoScreen({ navigation }) {
                     value={preco}
                     onChangeText={setPreco}
                     style={styles.input}
+                    placeholder="Digite o preço"
+                    placeholderTextColor="#aaa"
                     keyboardType="decimal-pad"
                 />
             </View>
